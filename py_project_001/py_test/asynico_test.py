@@ -30,12 +30,12 @@ def ay_spider():
         logging.info('scraping %s',url)
         response = requests.get(url=url)
 
+
 async def excute(x):
     """
     async关键字，声明一个携程方法
     """
     print('Number:',x)
-
 
 async def request():
     #请求百度方法，returns:response对象
@@ -52,11 +52,20 @@ def call_back(task):
 def user_request():
     #使用协程
     coroutine = request()
-    loop = asyncio
-    task = asyncio.ensure_future(coroutine,loop=loop)
+    loop = asyncio.get_event_loop()
+    task = loop.create_task(coroutine)
     task.add_done_callback(call_back)
     loop.run_until_complete(task)
 
+def more_task():
+    #多任务协成
+    loop = asyncio.get_event_loop()
+    tasks = [loop.create_task(request()) for _ in range(5)]#对象列表
+    print('Tasks:',tasks)
+    loop.run_until_complete(asyncio.wait(tasks))
+
+    for task in tasks:
+        print("Task:",task)
 
 
 
@@ -84,6 +93,6 @@ def user_async():
 if __name__ == '__main__':
     # ay_spider() #所需时间120s
     # user_async()
-    user_request()
-
+    # user_request()
+    more_task()
 
