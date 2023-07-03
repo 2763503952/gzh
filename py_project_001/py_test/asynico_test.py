@@ -35,6 +35,32 @@ async def excute(x):
     async关键字，声明一个携程方法
     """
     print('Number:',x)
+
+
+async def request():
+    #请求百度方法，returns:response对象
+    url = 'https://www.baidu.com'
+    status = requests.get(url)
+    return status
+
+
+def call_back(task):
+    #定义回调函数
+    print("调用回调函数，结果为;",task.result())
+
+
+def user_request():
+    #使用协程
+    coroutine = request()
+    loop = asyncio
+    task = asyncio.ensure_future(coroutine,loop=loop)
+    task.add_done_callback(call_back)
+    loop.run_until_complete(task)
+
+
+
+
+
 def user_async():
     """
     调用协程方法
@@ -57,6 +83,7 @@ def user_async():
 
 if __name__ == '__main__':
     # ay_spider() #所需时间120s
-    user_async()
+    # user_async()
+    user_request()
 
 
